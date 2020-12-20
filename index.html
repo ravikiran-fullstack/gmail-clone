@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Gmail Clone</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p>Gmail Clone</p>
+        <!--Add buttons to initiate auth sequence and sign out-->
+        <button class="btn btn-info hidden" id="authorize_button">Authorize</button>
+        <button class="btn btn-info hidden" id="signOut_button">Sign Out</button>
+
+        <pre id="content" style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+        <div class="col-sm-3 col-md-2">
+          <a href="#" class="btn btn-danger btn-sm btn-block" role="button">
+            <i class="glyphicon glyphicon-edit"></i>
+            Compose</a>
+          <hr>
+        </div>
+        <div class="col-sm-9 col-md-10" style="display: flex;">
+          <!-- Split button -->
+          
+          <button type="button" class="btn" data-toggle="tooltip" title="Refresh">
+            <i class="tiny material-icons">cached</i> 
+          </button>
+          <!-- Single button -->
+          <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              More
+            </a>
+          
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">All</a>
+              <a class="dropdown-item" href="#">None</a>
+              <a class="dropdown-item" href="#">Read</a>
+              <a class="dropdown-item" href="#">Unread</a>
+              <a class="dropdown-item" href="#">Starred</a>
+            </div>
+          </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-3 col-md-2">
+        
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" id="homeTab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true" onclick="showPrimaryEmails()">Home</a>
+          <a class="nav-link" id="starredTab" data-toggle="pill" role="tab" aria-controls="v-pills-profile" aria-selected="false" onclick="showStarred()">Starred</a>
+          <a class="nav-link" id="importantTab" data-toggle="pill" role="tab" aria-controls="v-pills-messages" aria-selected="false" onclick="showImportantMails()">Important</a>
+          <a class="nav-link" id="sentMailTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings" aria-selected="false" onclick="showSentMails()">Sent Mail</a>
+          <a class="nav-link" id="draftsTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings" aria-selected="false" onclick="showDrafts()">Drafts</a>
+        </div>
+      </div>
+      <div id="emailsColumn" class="col-sm-9 col-md-10">
+        <!-- Nav tabs -->
+        <ul id="emailsTabList" class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="primary-tab" data-toggle="tab" href="#primaryTab" role="tab" aria-controls="primary" aria-selected="true" onclick="showPrimaryEmails()">Primary</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="social-tab" data-toggle="tab" href="#socialTab" role="tab" aria-controls="social" aria-selected="false" onclick="showSocialEmails()">Social</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="promotions-tab" data-toggle="tab" href="#promotionsTab" role="tab" aria-controls="promotions" aria-selected="false" onclick="showPromotionsEmails()">Promotions</a>
+          </li>
+        </ul>
+        <div id="emailsLoading" class="text-center loading hidden">
+          <p>Loading...</p>
+        </div>
+        <div id="emailsList" class="tab-content" id="myTabContent">
+          
+          <div class="tab-pane fade show active" id="primaryTab" role="tabpanel" aria-labelledby="primary-tab"></div>
+          <div class="tab-pane fade" id="socialTab" role="tabpanel" aria-labelledby="social-tab"></div>
+          <div class="tab-pane fade" id="promotionsTab" role="tabpanel" aria-labelledby="promotions-tab"></div>
+        </div>
+        <div class="row-md-12">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <script src="gmailScript.js"></script>
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
+</body>
+
+</html>
