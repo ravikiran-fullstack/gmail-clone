@@ -54,12 +54,14 @@ function updateSignInStatus(isSignedIn) {
   if (isSignedIn) {
     authorizeButton.classList.add('hidden');
     signOutButton.classList.remove('hidden');
+    document.getElementById("homeContainer").classList.remove('hidden');
+    showPrimaryEmails();
    // listLabels();
    // listMessages('github');
   } else {
     authorizeButton.classList.remove('hidden');
     signOutButton.classList.add('hidden');
-    document.getElementById("content").innerHTML = '';
+    document.getElementById("homeContainer").classList.add('hidden');
   }
 }
 
@@ -300,6 +302,8 @@ function generateEmailsHtml(emailsInfoArray, category){
   document.getElementById(emailTab).append(emailsTable);
 }
 
+let previousTab = '';
+
 function fetchPrimaryMessages(){
   listPrimaryMessages();
 }
@@ -330,13 +334,32 @@ function fetchDrafts(){
 }
 
 function showPrimaryEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  document.getElementById('primaryTab').classList.remove('hidden');
   fetchAllMessages('INBOX');
+  previousTab = 'primaryTab';
 }
 
 function showSocialEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  document.getElementById('socialTab').classList.remove('hidden');
   fetchAllMessages('CATEGORY_SOCIAL');
+  previousTab = 'socialTab';
 }
 
 function showPromotionsEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  document.getElementById('promotionsTab').classList.remove('hidden');
   fetchAllMessages('CATEGORY_PROMOTIONS');
+  previousTab = 'promotionsTab';
+}
+
+function clickPrimaryTab(){
+  document.getElementById('primary-tab').click();
 }

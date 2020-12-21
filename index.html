@@ -11,85 +11,106 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      <img height="40px"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2000px-Google_2015_logo.svg.png">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <form class="form-inline mr-auto" >
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <ul class="navbar-nav">
+        <li class="nav-item active hidden" id="authorize_button">
+          <a class="nav-link text-info" href="#">Sign In</a>
 
-
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <p>Gmail Clone</p>
-        <!--Add buttons to initiate auth sequence and sign out-->
-        <button class="btn btn-info hidden" id="authorize_button">Authorize</button>
-        <button class="btn btn-info hidden" id="signOut_button">Sign Out</button>
-
-        <pre id="content" style="white-space: pre-wrap;"></pre>
-      </div>
+        </li>
+        <li class="nav-item active hidden" id="signOut_button">
+          <a class="nav-link text-info" href="#">Sign out</a>
+        </li>
+      </ul>
     </div>
-  </div>
+  </nav>
 
 
-  <div class="container">
+  <div class="container" id="homeContainer">
     <div class="row">
-        <div class="col-sm-3 col-md-2">
-          <a href="#" class="btn btn-danger btn-sm btn-block" role="button">
-            <i class="glyphicon glyphicon-edit"></i>
-            Compose</a>
-          <hr>
-        </div>
-        <div class="col-sm-9 col-md-10" style="display: flex;">
-          <!-- Split button -->
-          
-          <button type="button" class="btn" data-toggle="tooltip" title="Refresh">
-            <i class="tiny material-icons">cached</i> 
-          </button>
-          <!-- Single button -->
-          <div class="dropdown">
-            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              More
-            </a>
-          
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="#">All</a>
-              <a class="dropdown-item" href="#">None</a>
-              <a class="dropdown-item" href="#">Read</a>
-              <a class="dropdown-item" href="#">Unread</a>
-              <a class="dropdown-item" href="#">Starred</a>
-            </div>
+      <div class="col-sm-3 col-md-2">
+        <a href="#" class="btn btn-danger btn-sm btn-block" role="button">
+          <i class="glyphicon glyphicon-edit"></i>
+          Compose</a>
+        <hr>
+      </div>
+      <div class="col-sm-9 col-md-10" style="display: flex;">
+        <!-- Split button -->
+
+        <button type="button" class="btn" data-toggle="tooltip" title="Refresh">
+          <i class="tiny material-icons">cached</i>
+        </button>
+        <!-- Single button -->
+        <div class="dropdown">
+          <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            More
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#">All</a>
+            <a class="dropdown-item" href="#">None</a>
+            <a class="dropdown-item" href="#">Read</a>
+            <a class="dropdown-item" href="#">Unread</a>
+            <a class="dropdown-item" href="#">Starred</a>
           </div>
+        </div>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-sm-3 col-md-2">
-        
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <a class="nav-link active" id="homeTab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true" onclick="showPrimaryEmails()">Home</a>
-          <a class="nav-link" id="starredTab" data-toggle="pill" role="tab" aria-controls="v-pills-profile" aria-selected="false" onclick="showStarred()">Starred</a>
-          <a class="nav-link" id="importantTab" data-toggle="pill" role="tab" aria-controls="v-pills-messages" aria-selected="false" onclick="showImportantMails()">Important</a>
-          <a class="nav-link" id="sentMailTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings" aria-selected="false" onclick="showSentMails()">Sent Mail</a>
-          <a class="nav-link" id="draftsTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings" aria-selected="false" onclick="showDrafts()">Drafts</a>
+          <a class="nav-link active" id="homeTab" data-toggle="pill" role="tab" aria-controls="v-pills-home"
+            aria-selected="true" onclick="clickPrimaryTab()">Home</a>
+          <a class="nav-link" id="starredTab" data-toggle="pill" role="tab" aria-controls="v-pills-profile"
+            aria-selected="false" onclick="showStarred()">Starred</a>
+          <a class="nav-link" id="importantTab" data-toggle="pill" role="tab" aria-controls="v-pills-messages"
+            aria-selected="false" onclick="showImportantMails()">Important</a>
+          <a class="nav-link" id="sentMailTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
+            aria-selected="false" onclick="showSentMails()">Sent Mail</a>
+          <a class="nav-link" id="draftsTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
+            aria-selected="false" onclick="showDrafts()">Drafts</a>
         </div>
       </div>
       <div id="emailsColumn" class="col-sm-9 col-md-10">
         <!-- Nav tabs -->
         <ul id="emailsTabList" class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="primary-tab" data-toggle="tab" href="#primaryTab" role="tab" aria-controls="primary" aria-selected="true" onclick="showPrimaryEmails()">Primary</a>
+            <a class="nav-link active" id="primary-tab" data-toggle="tab" href="#primaryTab" role="tab"
+              aria-controls="primary" aria-selected="true" onclick="showPrimaryEmails()">Primary</a>
           </li>
           <li class="nav-item" role="presentation">
-            <a class="nav-link" id="social-tab" data-toggle="tab" href="#socialTab" role="tab" aria-controls="social" aria-selected="false" onclick="showSocialEmails()">Social</a>
+            <a class="nav-link" id="social-tab" data-toggle="tab" href="#socialTab" role="tab" aria-controls="social"
+              aria-selected="false" onclick="showSocialEmails()">Social</a>
           </li>
           <li class="nav-item" role="presentation">
-            <a class="nav-link" id="promotions-tab" data-toggle="tab" href="#promotionsTab" role="tab" aria-controls="promotions" aria-selected="false" onclick="showPromotionsEmails()">Promotions</a>
+            <a class="nav-link" id="promotions-tab" data-toggle="tab" href="#promotionsTab" role="tab"
+              aria-controls="promotions" aria-selected="false" onclick="showPromotionsEmails()">Promotions</a>
           </li>
         </ul>
         <div id="emailsLoading" class="text-center loading hidden">
           <p>Loading...</p>
         </div>
         <div id="emailsList" class="tab-content" id="myTabContent">
-          
-          <div class="tab-pane fade show active" id="primaryTab" role="tabpanel" aria-labelledby="primary-tab"></div>
-          <div class="tab-pane fade" id="socialTab" role="tabpanel" aria-labelledby="social-tab"></div>
-          <div class="tab-pane fade" id="promotionsTab" role="tabpanel" aria-labelledby="promotions-tab"></div>
+            <div class="tab-pane fade show active" id="primaryTab" role="tabpanel" aria-labelledby="primary-tab"></div>
+            <div class="tab-pane fade" id="socialTab" role="tabpanel" aria-labelledby="social-tab"></div>
+            <div class="tab-pane fade" id="promotionsTab" role="tabpanel" aria-labelledby="promotions-tab"></div>
+            <div class="tab-pane fade" id="starredTab" role="tabpanel" aria-labelledby="starred-tab"></div>
+            <div class="tab-pane fade" id="importantTab" role="tabpanel" aria-labelledby="important-tab"></div>
+            <div class="tab-pane fade" id="sentTab" role="tabpanel" aria-labelledby="send-tab"></div>
+            <div class="tab-pane fade" id="draftsTab" role="tabpanel" aria-labelledby="drafts-tab"></div>
         </div>
         <div class="row-md-12">
 
