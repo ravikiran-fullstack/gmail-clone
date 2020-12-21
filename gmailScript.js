@@ -205,7 +205,7 @@ async function processIndividualDraftsData(userDraftsData, category){
 function generateDraftsHtml(draftsInfoArray, category){
   document.getElementById('emailsLoading').classList.add('hidden');
   console.log('generateDraftsHtml', draftsInfoArray);
-  let emailTab = 'primaryTab';
+  let emailTab = 'draftsTab';
   document.getElementById(emailTab).innerHTML = '';
   const draftsTable =  document.createElement('div');
   draftsTable.classList.add('container');
@@ -268,10 +268,16 @@ function generateEmailsHtml(emailsInfoArray, category){
     document.getElementById('emailsTabList').classList.remove('hidden');
     emailTab = 'promotionsTab';
     document.getElementById(emailTab).innerHTML = '';
-  } else if(category === ' STARRED'){
-    emailTable = 'emailsColumn';
+  } else if(category === 'STARRED'){
+    emailTab = 'starredTab';
     document.getElementById(emailTab).innerHTML = '';
-  }
+  } else if(category === 'IMPORTANT'){
+    emailTab = 'importantTab';
+    document.getElementById(emailTab).innerHTML = '';
+  } else if(category === 'STARRED'){
+    emailTab = 'starredTab';
+    document.getElementById(emailTab).innerHTML = '';
+  } 
   
   const emailsTable =  document.createElement('div');
   emailsTable.classList.add('container');
@@ -303,30 +309,66 @@ function generateEmailsHtml(emailsInfoArray, category){
 }
 
 let previousTab = '';
+let previousButton = 'homeButton';
 
 function fetchPrimaryMessages(){
   listPrimaryMessages();
 }
 
 function showStarred(){
-  document.getElementById('emailsTabList').classList.add('hidden');
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
+  document.getElementById('starredTab').classList.remove('hidden');
+  document.getElementById('starredButton').classList.add('active');
   fetchAllMessages('STARRED');
+  previousTab = 'starredTab';
+  previousButton = 'starredButton';
 }
 
 function showImportantMails(){
-  document.getElementById('emailsTabList').classList.add('hidden');
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
+  document.getElementById('importantTab').classList.remove('hidden');
+  document.getElementById('importantButton').classList.add('active');
   fetchAllMessages('IMPORTANT');
+  previousTab = 'importantTab';
+  previousButton = 'importantButton';
 }
 
 function showSentMails(){
-  document.getElementById('emailsTabList').classList.add('hidden');
-  fetchAllMessages('STARRED');
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
+  document.getElementById('sentMailsTab').classList.remove('hidden');
+  document.getElementById('sentMailsButton').classList.add('active');
+  fetchAllMessages('SENTMAILS');
+  previousTab = 'sentMailsTab';
+  previousButton = 'sentMailsButton';
 }
 
 function showDrafts(){
-  document.getElementById('emailsTabList').classList.add('hidden');
-  document.getElementById('primaryTab').innerHTML = '';
+  if(previousTab !== ''){
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
+  document.getElementById('draftsTab').classList.remove('hidden');
+  document.getElementById('draftsButton').classList.add('active');
   fetchAllDrafts();
+  previousTab = 'draftsTab';
+  previousButton = 'draftsButton';
 }
 
 function fetchDrafts(){
@@ -337,9 +379,14 @@ function showPrimaryEmails(){
   if(previousTab !== ''){
     document.getElementById(previousTab).classList.add('hidden');
   }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
   document.getElementById('primaryTab').classList.remove('hidden');
+  document.getElementById('homeButton').classList.add('active');
   fetchAllMessages('INBOX');
   previousTab = 'primaryTab';
+  previousButton = 'homeButton';
 }
 
 function showSocialEmails(){
@@ -362,4 +409,20 @@ function showPromotionsEmails(){
 
 function clickPrimaryTab(){
   document.getElementById('primary-tab').click();
+}
+
+function clickStarredTab(){
+  document.getElementById('social-tab').click();
+}
+
+function clickImportantMailsTab(){
+  document.getElementById('important-tab').click();
+}
+
+function clickSentMailsTab(){
+  document.getElementById('sentMails-tab').click();
+}
+
+function clickDraftsTab(){
+  document.getElementById('drafts-tab').click();
 }

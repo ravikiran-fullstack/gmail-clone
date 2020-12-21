@@ -48,7 +48,7 @@
       <div class="col-sm-9 col-md-10" style="display: flex;">
         <!-- Split button -->
 
-        <button type="button" class="btn" data-toggle="tooltip" title="Refresh">
+        <button type="button" class="btn" data-toggle="tooltip" title="Refresh" onclick="clickPrimaryTab()">
           <i class="tiny material-icons">cached</i>
         </button>
         <!-- Single button -->
@@ -72,16 +72,16 @@
     <div class="row">
       <div class="col-sm-3 col-md-2">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <a class="nav-link active" id="homeTab" data-toggle="pill" role="tab" aria-controls="v-pills-home"
+          <a class="nav-link active" id="homeButton" data-toggle="pill" role="tab" aria-controls="v-pills-home"
             aria-selected="true" onclick="clickPrimaryTab()">Home</a>
-          <a class="nav-link" id="starredTab" data-toggle="pill" role="tab" aria-controls="v-pills-profile"
-            aria-selected="false" onclick="showStarred()">Starred</a>
-          <a class="nav-link" id="importantTab" data-toggle="pill" role="tab" aria-controls="v-pills-messages"
-            aria-selected="false" onclick="showImportantMails()">Important</a>
-          <a class="nav-link" id="sentMailTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
-            aria-selected="false" onclick="showSentMails()">Sent Mail</a>
-          <a class="nav-link" id="draftsTab" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
-            aria-selected="false" onclick="showDrafts()">Drafts</a>
+          <a class="nav-link" id="starredButton" data-toggle="pill" role="tab" aria-controls="v-pills-profile"
+            aria-selected="false" onclick="clickStarredTab()">Starred</a>
+          <a class="nav-link" id="importantButton" data-toggle="pill" role="tab" aria-controls="v-pills-messages"
+            aria-selected="false" onclick="clickImportantMailsTab()">Important</a>
+          <a class="nav-link" id="sentMailsButton" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
+            aria-selected="false" onclick="clickSentMailsTab()">Sent Mail</a>
+          <a class="nav-link" id="draftsButton" data-toggle="pill" role="tab" aria-controls="v-pills-settings"
+            aria-selected="false" onclick="clickDraftsTab()">Drafts</a>
         </div>
       </div>
       <div id="emailsColumn" class="col-sm-9 col-md-10">
@@ -99,6 +99,22 @@
             <a class="nav-link" id="promotions-tab" data-toggle="tab" href="#promotionsTab" role="tab"
               aria-controls="promotions" aria-selected="false" onclick="showPromotionsEmails()">Promotions</a>
           </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="starred-tab" data-toggle="tab" href="#starredTab" role="tab"
+              aria-controls="starred" aria-selected="false" onclick="showStarred()">Starred</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="important-tab" data-toggle="tab" href="#importantTab" role="tab"
+              aria-controls="important" aria-selected="false" onclick="showImportantMails()">Important</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="sentMails-tab" data-toggle="tab" href="#sentMailsTab" role="tab"
+              aria-controls="sentMails" aria-selected="false" onclick="showSentMails()">Sent Mail</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="drafts-tab" data-toggle="tab" href="#draftsTab" role="tab"
+              aria-controls="drafts" aria-selected="false" onclick="showDrafts()">Drafts</a>
+          </li>
         </ul>
         <div id="emailsLoading" class="text-center loading hidden">
           <p>Loading...</p>
@@ -109,7 +125,7 @@
             <div class="tab-pane fade" id="promotionsTab" role="tabpanel" aria-labelledby="promotions-tab"></div>
             <div class="tab-pane fade" id="starredTab" role="tabpanel" aria-labelledby="starred-tab"></div>
             <div class="tab-pane fade" id="importantTab" role="tabpanel" aria-labelledby="important-tab"></div>
-            <div class="tab-pane fade" id="sentTab" role="tabpanel" aria-labelledby="send-tab"></div>
+            <div class="tab-pane fade" id="sentMailsTab" role="tabpanel" aria-labelledby="send-tab"></div>
             <div class="tab-pane fade" id="draftsTab" role="tabpanel" aria-labelledby="drafts-tab"></div>
         </div>
         <div class="row-md-12">
