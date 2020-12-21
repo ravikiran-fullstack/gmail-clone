@@ -36,14 +36,54 @@
     </div>
   </nav>
 
+<!-- Modal -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendEmailModalLongTitle">Compose</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-2" for="toEmailId">To</label>
+              <input type="email" class="form-control col-md-9" id="toEmailId" onkeypress="clearEmailErrorMessage()">
+              <small id="emailHelp" class="text-danger text-center"></small>
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2" for="ccBccEmailId">Cc/Bcc</label>
+              <input type="email" class="form-control col-md-9" id="ccBccEmailId">
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2" for="emailSubject">Subject</label>
+              <input type="text" class="form-control col-md-9" id="emailSubject">
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2" for="emailBody">Message</label>
+              <textarea rows="10" cols="30" class="form-control col-lg-9" id="emailBody"></textarea>
+            </div>
+            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cancelSendingEmail()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="sendEmail()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="container" id="homeContainer">
-    <div class="row">
+    <div class="row mt-2">
       <div class="col-sm-3 col-md-2">
-        <a href="#" class="btn btn-danger btn-sm btn-block" role="button">
-          <i class="glyphicon glyphicon-edit"></i>
-          Compose</a>
-        <hr>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sendEmailModal">
+          Compose
+        </button>
       </div>
       <div class="col-sm-9 col-md-10" style="display: flex;">
         <!-- Split button -->

@@ -426,3 +426,57 @@ function clickSentMailsTab(){
 function clickDraftsTab(){
   document.getElementById('drafts-tab').click();
 }
+
+function cancelSendingEmail(){
+
+
+}
+
+function clearEmailErrorMessage(){
+  document.getElementById('emailHelp').innerHTML = '';
+}
+
+function sendEmail(){
+  const toEmail = document.getElementById('toEmailId').value;
+  document.getElementById('emailHelp').innerHTML = '';
+  if(toEmail === '' ){
+    document.getElementById('toEmailId').focus();
+    document.getElementById('emailHelp').innerHTML = 'Please specify at least one recipient'
+    document.getElementById('emailHelp').style.color = 'red';
+    return;
+  }
+  const ccBccEmailId = document.getElementById('ccBccEmailId').value;
+  const emailSubject = document.getElementById('emailSubject').value;
+  const emailBody = document.getElementById('emailBody').value;
+
+  const mimeData = [
+    "From:ravikiran.code@gmail.com",
+    "To:"+toEmail,
+    "Subject: =?utf-8?B?" + window.btoa(unescape(encodeURIComponent(emailSubject))) + "?=",
+    "MIME-Version: 1.0",
+    "Content-Type: text/plain; charset=UTF-8",
+    "Content-Transfer-Encoding: 7bit",
+    "",
+    ""+ emailBody].join("\n").trim();
+  const raw = window.btoa(unescape(encodeURIComponent(mimeData))).replace(/\+/g, '-').replace(/\//g, '_');
+
+  console.log(raw);
+  console.log('sendEmail');
+
+  gapi.client.gmail.users.messages.send({
+    'userId': 'me',
+    'resource': {
+      'raw': raw
+    }
+  }).execute(res => {
+    console.log('Email sent', res);
+    //this.snackBar.success('Email has send Successfully')
+  });
+
+
+  $('#sendEmailModal').modal('hide')
+}
+
+$('#sendEmailModal').on('hidden.bs.modal', function (e) {
+  console.log('modal closed');
+})

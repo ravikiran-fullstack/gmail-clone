@@ -22,12 +22,12 @@ hr { margin-top: 5px;margin-bottom: 10px; }
   cursor: pointer;
 }
 
-.primaryTabTable, .row{
+#emailsColumn .row{
   padding:10px 0;
   cursor: pointer;
 }
 
-.primaryTabTable, .row:nth-child(even){
+#emailsColumn .row:nth-child(even){
   background-color: #e0e0e0;
 }
 
