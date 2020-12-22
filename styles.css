@@ -28,10 +28,40 @@ hr { margin-top: 5px;margin-bottom: 10px; }
 }
 
 #emailsColumn .row:nth-child(even){
-  background-color: #e0e0e0;
+  /* background-color: #e0e0e0; */
 }
 
 .loading{
   padding: 25% 50%;
   font-size: 25px;
+}
+
+.emailRead{
+  background-color: #f5f5f5;
+  font-weight: normal !important;
+}
+
+.emailsCustomRow{
+  font-weight: bold;
+  border-bottom: 1px solid rgb(211, 211, 211) !important;
+}
+
+.draftsCustomRow{
+  font-weight: normal;
+  border-bottom: 1px solid rgb(211, 211, 211) !important;
+  background-color: #f5f5f5;
+}
+
+.starred i{
+  color:gold;
+  /* background-color: #f5f5f5; */
+}
+
+.unStarred{
+  color:black;
+  /* background-color: #f5f5f5; */
+}
+
+.red{
+  color: red;
 }

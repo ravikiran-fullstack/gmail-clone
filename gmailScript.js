@@ -99,7 +99,7 @@ function listLabels() {
   gapi.client.gmail.users.labels
     .list({userId: "me"})
     .then(function (response) {
-      console.log('labels',response);
+      //console.log('labels',response);
       var labels = response.result.labels;
       appendPre("Labels:");
 
@@ -139,7 +139,7 @@ function listMessages(query) {
 function fetchProfile(){
   gapi.client.request('https://gmail.googleapis.com/gmail/v1/users/me/profile')
     .then(function(userProfileData){
-      console.log('Profile ', userProfileData);
+      //console.log('Profile ', userProfileData);
       showUserProfileData(userProfileData);
     }).catch(err => console.error('Error while loading Profile',err));
 }
@@ -161,7 +161,7 @@ async function fetchAllMessages(category){
   document.getElementById('emailsLoading').classList.remove('hidden');
   try{
     const userEmailsData = await gapi.client.request(`https://gmail.googleapis.com/gmail/v1/users/me/messages?labelIds=${category}`);
-    console.log('Emails ', userEmailsData);
+    //console.log('Emails ', userEmailsData);
     processIndividualEmailsData(userEmailsData, category);
   }catch(err){
     console.error('Error while loading Emails',err)
@@ -181,7 +181,7 @@ async function fetchAllDrafts(){
   document.getElementById('emailsLoading').classList.remove('hidden');
   try{
     const userDraftsData = await gapi.client.request(`https://gmail.googleapis.com/gmail/v1/users/me/drafts`);
-    console.log('Drafts ', userDraftsData);
+    //console.log('Drafts ', userDraftsData);
     processIndividualDraftsData(userDraftsData, 'DRAFTS');
   }catch(err){
     console.error('Error while loading Drafts',err)
@@ -189,7 +189,7 @@ async function fetchAllDrafts(){
 }
 
 async function processIndividualDraftsData(userDraftsData, category){
-  console.log(userDraftsData);
+  //console.log(userDraftsData);
   userDraftsArray  = JSON.parse(userDraftsData.body);
   const draftsInfoArray = [];
   Promise.all(
@@ -204,7 +204,7 @@ async function processIndividualDraftsData(userDraftsData, category){
 
 function generateDraftsHtml(draftsInfoArray, category){
   document.getElementById('emailsLoading').classList.add('hidden');
-  console.log('generateDraftsHtml', draftsInfoArray);
+  //console.log('generateDraftsHtml', draftsInfoArray);
   let emailTab = 'draftsTab';
   document.getElementById(emailTab).innerHTML = '';
   const draftsTable =  document.createElement('div');
@@ -214,6 +214,7 @@ function generateDraftsHtml(draftsInfoArray, category){
 
   draftsInfoArray.map(draft => {
     const draftProcessedData = {};
+    const isStarred = draft.result.message.labelIds.includes('STARRED');
     const payloadHeaders = draft.result.message.payload.headers;
     payloadHeaders.map(header => {
       if(header.name === 'Date'){
@@ -226,15 +227,39 @@ function generateDraftsHtml(draftsInfoArray, category){
     })
     draftsProcessedData.push(draftProcessedData);
     const tableRow = document.createElement('div');
-    tableRow.classList.add('row','emailsCustomRow');
+    tableRow.classList.add('row','draftsCustomRow');
+    if(isStarred){
+      tableRow.classList.add('starred');
+    } else {
+      tableRow.classList.add('unStarred');
+    }
     tableRow.innerHTML = `
-                  <div class="col-4 text-truncate">${draftProcessedData.from}</div>
+                  <div class="col-1">
+                    <input type="checkbox" aria-label="Checkbox">
+                  </div>
+                  <div class="col-1"><i class="material-icons">star_border</i></div>
+                  <div class="col-4 text-truncate text-danger">${draftProcessedData.from}</div>
                   <div class="col-4 text-truncate">${draftProcessedData.subject}</div>
-                  <div class="col-4 text-truncate">${draftProcessedData.date}</div>
+                  <div class="col-2 text-truncate">${formatDate(draftProcessedData.date)}</div>
                 `;
     draftsTable.append(tableRow);
   })
   document.getElementById(emailTab).append(draftsTable);
+}
+
+function formatDate(date){
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+// document.write("The current month is " + monthNames[d.getMonth()]);
+  const mailDate = new Date(date);
+  // console.log(temp.getDate())
+  // console.log(temp.getDay())
+  // console.log(temp.getFullYear())
+  // console.log(monthNames[temp.getMonth()])
+  return `${mailDate.getDate()} ${monthNames[mailDate.getMonth()].substring(0,3)} ${mailDate.getFullYear()}`; 
+  
 }
 
 async function processIndividualEmailsData(userEmailsData, category){
@@ -252,8 +277,8 @@ async function processIndividualEmailsData(userEmailsData, category){
 
 function generateEmailsHtml(emailsInfoArray, category){
   document.getElementById('emailsLoading').classList.add('hidden');
-  console.log('---------------------------------------')
-  console.log('emailsInfoArray',emailsInfoArray);
+  //console.log('---------------------------------------')
+ // console.log('emailsInfoArray',emailsInfoArray);
   //document.getElementById('emailsList').innerHTML = '';
   let emailTab = 'primaryTab';
   if(category === 'INBOX'){
@@ -284,6 +309,10 @@ function generateEmailsHtml(emailsInfoArray, category){
   emailsTable.setAttribute('id', `${emailTab}Table`);
   emailsProcessedData = [];
   emailsInfoArray.map(email => {
+    console.log(email.result.labelIds);
+    const isUnRead = email.result.labelIds.includes('UNREAD');
+    const isStarred = email.result.labelIds.includes('STARRED');
+    console.log('is this email read?', !isUnRead);
     const emailProcessedData = {};
     const payloadHeaders = email.result.payload.headers;
     payloadHeaders.map(header => {
@@ -298,10 +327,22 @@ function generateEmailsHtml(emailsInfoArray, category){
     emailsProcessedData.push(emailProcessedData);
     const tableRow = document.createElement('div');
     tableRow.classList.add('row','emailsCustomRow');
+    if(!isUnRead){
+      tableRow.classList.add('emailRead');
+    }
+    if(isStarred){
+      tableRow.classList.add('starred');
+    } else {
+      tableRow.classList.add('unStarred');
+    }
     tableRow.innerHTML = `
+                  <div class="col-1">
+                    <input type="checkbox" aria-label="Checkbox">
+                  </div>
+                  <div class="col-1"><i class="material-icons">star_border</i></div>
                   <div class="col-4 text-truncate">${emailProcessedData.from}</div>
                   <div class="col-4 text-truncate">${emailProcessedData.subject}</div>
-                  <div class="col-4 text-truncate">${emailProcessedData.date}</div>
+                  <div class="col-2 text-truncate">${formatDate(emailProcessedData.date)}</div>
                 `;
     emailsTable.append(tableRow);
   })
@@ -407,12 +448,45 @@ function showPromotionsEmails(){
   previousTab = 'promotionsTab';
 }
 
+function refreshCurrentTab(){
+  console.log('previousTab',previousTab);
+
+  switch(previousTab) {
+    case 'primaryTab':
+      document.getElementById('primary-tab').click();    
+      break;
+    case 'socialTab':
+      document.getElementById('social-tab').click();    
+      break;
+    case 'promotionsTab':
+      document.getElementById('promotions-tab').click();    
+      break;
+    case 'starredTab':
+      document.getElementById('starred-tab').click();    
+      break;
+    case 'importantTab':
+      document.getElementById('important-tab').click();    
+      break;    
+    case 'sentMailsTab':
+      document.getElementById('sentMails-tab').click();    
+      break;    
+    case 'draftsTab':
+      document.getElementById('drafts-tab').click();    
+      break;    
+    default:
+      document.getElementById('primary-tab').click();    
+      break;
+  }
+
+  //document.getElementById('primary-tab').click();
+}
+
 function clickPrimaryTab(){
   document.getElementById('primary-tab').click();
 }
 
 function clickStarredTab(){
-  document.getElementById('social-tab').click();
+  document.getElementById('starred-tab').click();
 }
 
 function clickImportantMailsTab(){
@@ -428,7 +502,6 @@ function clickDraftsTab(){
 }
 
 function cancelSendingEmail(){
-
 
 }
 
@@ -460,8 +533,8 @@ function sendEmail(){
     ""+ emailBody].join("\n").trim();
   const raw = window.btoa(unescape(encodeURIComponent(mimeData))).replace(/\+/g, '-').replace(/\//g, '_');
 
-  console.log(raw);
-  console.log('sendEmail');
+  //console.log(raw);
+  //console.log('sendEmail');
 
   gapi.client.gmail.users.messages.send({
     'userId': 'me',
