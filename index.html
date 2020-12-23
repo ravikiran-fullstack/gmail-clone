@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-light bg-light">
+  <nav class="navbar navbar-expand-md navbar-light bg-light" id="navBar">
     <a class="navbar-brand" href="#">
       <img height="40px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2000px-Google_2015_logo.svg.png">
@@ -36,6 +36,14 @@
     </div>
   </nav>
 
+<div class="container mt-5 hidden" id="signInContainer">
+  <div class="row">
+    <div class="col-md-4 offset-md-4 signInForm text-center">
+      <button class="btn btn-success" id="signInButton">Sign In</button>
+    </div>
+  </div>
+</div>
+  
 <!-- Modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-dialog-centered" role="document">

@@ -9,7 +9,7 @@ var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/res
 // included, separated by spaces.
 var SCOPES = "https://www.googleapis.com/auth/gmail.modify";
 
-var authorizeButton = document.getElementById("authorize_button");
+var authorizeButton = document.getElementById("signInButton");
 var signOutButton = document.getElementById("signOut_button");
 
 /**
@@ -55,10 +55,14 @@ function updateSignInStatus(isSignedIn) {
     authorizeButton.classList.add('hidden');
     signOutButton.classList.remove('hidden');
     document.getElementById("homeContainer").classList.remove('hidden');
+    document.getElementById('signInContainer').classList.add('hidden');
+    document.getElementById('navBar').classList.remove('hidden');
     showPrimaryEmails();
    // listLabels();
    // listMessages('github');
   } else {
+    document.getElementById('signInContainer').classList.remove('hidden');
+    document.getElementById('navBar').classList.add('hidden');
     authorizeButton.classList.remove('hidden');
     signOutButton.classList.add('hidden');
     document.getElementById("homeContainer").classList.add('hidden');
