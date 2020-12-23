@@ -252,6 +252,7 @@ function generateDraftsHtml(draftsInfoArray, category){
 }
 
 function formatDate(date){
+
   const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
@@ -262,7 +263,9 @@ function formatDate(date){
   // console.log(temp.getDay())
   // console.log(temp.getFullYear())
   // console.log(monthNames[temp.getMonth()])
-  return `${mailDate.getDate()} ${monthNames[mailDate.getMonth()].substring(0,3)} ${mailDate.getFullYear()}`; 
+  let temp = `${mailDate.getDate()} ${monthNames[mailDate.getMonth()].substring(0,3)} ${mailDate.getFullYear()}`
+  console.log('Date ',temp, mailDate.getDate());
+  return temp; 
   
 }
 
@@ -279,11 +282,52 @@ async function processIndividualEmailsData(userEmailsData, category){
   }).catch(err => console.error('err', err));
 }
 
+function sortEmailsByDate(emailsInfoArray){
+  return emailsInfoArray.sort((email1, email2) => {
+    return new Date(email2.date) - new Date(email1.date);
+  })
+}
+
+function processEmailsInfoArray(emailsInfoArray, category){
+  const emailsProcessedData = [];
+  emailsInfoArray.filter(email => {
+
+    if(category === 'INBOX'){
+      if(email.result.labelIds.includes('INBOX') && (email.result.labelIds.includes('CATEGORY_PROMOTIONS'))){
+        return false;
+      } else if(email.result.labelIds.includes('INBOX') && email.result.labelIds.includes('SENT')){
+        return true;
+      } else if(!email.result.labelIds.includes('INBOX') && email.result.labelIds.includes('SENT')){
+        return false;
+      }
+    }
+    
+    return true;
+  }).map((email) => {
+    
+    const emailProcessedData = {};
+    emailProcessedData.labelIds = email.result.labelIds;
+    emailProcessedData.isUnRead = email.result.labelIds.includes('UNREAD');
+    emailProcessedData.isStarred = email.result.labelIds.includes('STARRED');
+    const payloadHeaders = email.result.payload.headers;
+    payloadHeaders.map(header => {
+      if(header.name === 'Date'){
+        emailProcessedData.date = header.value;
+      } else if (header.name === 'Subject'){
+        emailProcessedData.subject = header.value;
+      } else if (header.name === 'From'){
+        emailProcessedData.from = header.value;
+      }
+    })
+    emailsProcessedData.push(emailProcessedData);
+  })
+  console.log('emailsProcessedData',emailsProcessedData);
+  return sortEmailsByDate(emailsProcessedData);
+}
+
 function generateEmailsHtml(emailsInfoArray, category){
+  const sortedEmailsInfoArray = processEmailsInfoArray(emailsInfoArray, category);
   document.getElementById('emailsLoading').classList.add('hidden');
-  //console.log('---------------------------------------')
- // console.log('emailsInfoArray',emailsInfoArray);
-  //document.getElementById('emailsList').innerHTML = '';
   let emailTab = 'primaryTab';
   if(category === 'INBOX'){
     document.getElementById('emailsTabList').classList.remove('hidden');
@@ -296,6 +340,9 @@ function generateEmailsHtml(emailsInfoArray, category){
   } else if(category === 'CATEGORY_PROMOTIONS'){
     document.getElementById('emailsTabList').classList.remove('hidden');
     emailTab = 'promotionsTab';
+    document.getElementById(emailTab).innerHTML = '';
+  } else if(category === 'SENT'){
+    emailTab = 'sentMailsTab';
     document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'STARRED'){
     emailTab = 'starredTab';
@@ -312,29 +359,15 @@ function generateEmailsHtml(emailsInfoArray, category){
   emailsTable.classList.add('container');
   emailsTable.setAttribute('id', `${emailTab}Table`);
   emailsProcessedData = [];
-  emailsInfoArray.map(email => {
-    console.log(email.result.labelIds);
-    const isUnRead = email.result.labelIds.includes('UNREAD');
-    const isStarred = email.result.labelIds.includes('STARRED');
-    console.log('is this email read?', !isUnRead);
-    const emailProcessedData = {};
-    const payloadHeaders = email.result.payload.headers;
-    payloadHeaders.map(header => {
-      if(header.name === 'Date'){
-        emailProcessedData.date = header.value;
-      } else if (header.name === 'Subject'){
-        emailProcessedData.subject = header.value;
-      } else if (header.name === 'From'){
-        emailProcessedData.from = header.value;
-      }
-    })
-    emailsProcessedData.push(emailProcessedData);
+  sortedEmailsInfoArray.map(email => {
+    console.log('email', email);
+    console.log('-------------------------------------')
     const tableRow = document.createElement('div');
     tableRow.classList.add('row','emailsCustomRow');
-    if(!isUnRead){
+    if(!email.isUnRead){
       tableRow.classList.add('emailRead');
     }
-    if(isStarred){
+    if(email.isStarred){
       tableRow.classList.add('starred');
     } else {
       tableRow.classList.add('unStarred');
@@ -344,9 +377,9 @@ function generateEmailsHtml(emailsInfoArray, category){
                     <input type="checkbox" aria-label="Checkbox">
                   </div>
                   <div class="col-1"><i class="material-icons">star_border</i></div>
-                  <div class="col-4 text-truncate">${emailProcessedData.from}</div>
-                  <div class="col-4 text-truncate">${emailProcessedData.subject}</div>
-                  <div class="col-2 text-truncate">${formatDate(emailProcessedData.date)}</div>
+                  <div class="col-4 text-truncate">${email.from}</div>
+                  <div class="col-4 text-truncate">${email.subject}</div>
+                  <div class="col-2 text-truncate">${formatDate(email.date)}</div>
                 `;
     emailsTable.append(tableRow);
   })
@@ -397,7 +430,7 @@ function showSentMails(){
   }
   document.getElementById('sentMailsTab').classList.remove('hidden');
   document.getElementById('sentMailsButton').classList.add('active');
-  fetchAllMessages('SENTMAILS');
+  fetchAllMessages('SENT');
   previousTab = 'sentMailsTab';
   previousButton = 'sentMailsButton';
 }
