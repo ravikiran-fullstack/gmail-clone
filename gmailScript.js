@@ -258,13 +258,15 @@ function formatDate(date){
 ];
 
 // document.write("The current month is " + monthNames[d.getMonth()]);
-  const mailDate = new Date(date);
+console.log(date);
+  const dateString = date.substring(0,25);
+  const mailDate = new Date(dateString);
   // console.log(temp.getDate())
   // console.log(temp.getDay())
   // console.log(temp.getFullYear())
   // console.log(monthNames[temp.getMonth()])
   let temp = `${mailDate.getDate()} ${monthNames[mailDate.getMonth()].substring(0,3)} ${mailDate.getFullYear()}`
-  console.log('Date ',temp, mailDate.getDate());
+  //console.log('Date ',temp, mailDate.getDate());
   return temp; 
   
 }
