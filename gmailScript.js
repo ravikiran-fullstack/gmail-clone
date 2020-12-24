@@ -293,7 +293,6 @@ function sortEmailsByDate(emailsInfoArray){
 function processEmailsInfoArray(emailsInfoArray, category){
   const emailsProcessedData = [];
   emailsInfoArray.filter(email => {
-
     if(category === 'INBOX'){
       if(email.result.labelIds.includes('INBOX') && (email.result.labelIds.includes('CATEGORY_PROMOTIONS'))){
         return false;
@@ -308,6 +307,7 @@ function processEmailsInfoArray(emailsInfoArray, category){
   }).map((email) => {
     
     const emailProcessedData = {};
+    emailProcessedData.messageId = email.result.id;
     emailProcessedData.labelIds = email.result.labelIds;
     emailProcessedData.isUnRead = email.result.labelIds.includes('UNREAD');
     emailProcessedData.isStarred = email.result.labelIds.includes('STARRED');
@@ -324,6 +324,10 @@ function processEmailsInfoArray(emailsInfoArray, category){
     emailsProcessedData.push(emailProcessedData);
   })
   return sortEmailsByDate(emailsProcessedData);
+}
+
+function showIndividualEmail(messageId){
+  console.log('id', messageId);
 }
 
 function generateEmailsHtml(emailsInfoArray, category){
@@ -354,6 +358,8 @@ function generateEmailsHtml(emailsInfoArray, category){
   sortedEmailsInfoArray.map(email => {
     const tableRow = document.createElement('div');
     tableRow.classList.add('row','emailsCustomRow');
+    
+    tableRow.setAttribute("onclick",`showIndividualEmail('${email.messageId}')`);
     if(!email.isUnRead){
       tableRow.classList.add('emailRead');
     }
@@ -379,8 +385,40 @@ function generateEmailsHtml(emailsInfoArray, category){
 let previousTab = '';
 let previousButton = 'homeButton';
 
-function fetchPrimaryMessages(){
-  listPrimaryMessages();
+function showPrimaryEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  if(previousButton !== ''){
+    document.getElementById(previousButton).classList.remove('active');
+  }
+  document.getElementById('primaryTab').classList.remove('hidden');
+  document.getElementById('homeButton').classList.add('active');
+  fetchAllMessages('INBOX');
+  previousTab = 'primaryTab';
+  previousButton = 'homeButton';
+}
+
+function showSocialEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  document.getElementById('socialTab').classList.remove('hidden');
+  fetchAllMessages('CATEGORY_SOCIAL');
+  previousTab = 'socialTab';
+}
+
+function showPromotionsEmails(){
+  if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
+    document.getElementById(previousTab).classList.add('hidden');
+  }
+  document.getElementById('promotionsTab').classList.remove('hidden');
+  document.getElementById(previousTab).innerHTML = '';
+  fetchAllMessages('CATEGORY_PROMOTIONS');
+  previousTab = 'promotionsTab';
 }
 
 function showStarred(){
@@ -443,46 +481,6 @@ function showDrafts(){
   previousButton = 'draftsButton';
 }
 
-function fetchDrafts(){
-  listDrafts();
-}
-
-function showPrimaryEmails(){
-  if(previousTab !== ''){
-    document.getElementById(previousTab).innerHTML = '';
-    document.getElementById(previousTab).classList.add('hidden');
-  }
-  if(previousButton !== ''){
-    document.getElementById(previousButton).classList.remove('active');
-  }
-  document.getElementById('primaryTab').classList.remove('hidden');
-  document.getElementById('homeButton').classList.add('active');
-  fetchAllMessages('INBOX');
-  previousTab = 'primaryTab';
-  previousButton = 'homeButton';
-}
-
-function showSocialEmails(){
-  if(previousTab !== ''){
-    document.getElementById(previousTab).innerHTML = '';
-    document.getElementById(previousTab).classList.add('hidden');
-  }
-  document.getElementById('socialTab').classList.remove('hidden');
-  fetchAllMessages('CATEGORY_SOCIAL');
-  previousTab = 'socialTab';
-}
-
-function showPromotionsEmails(){
-  if(previousTab !== ''){
-    document.getElementById(previousTab).innerHTML = '';
-    document.getElementById(previousTab).classList.add('hidden');
-  }
-  document.getElementById('promotionsTab').classList.remove('hidden');
-  document.getElementById(previousTab).innerHTML = '';
-  fetchAllMessages('CATEGORY_PROMOTIONS');
-  previousTab = 'promotionsTab';
-}
-
 function refreshCurrentTab(){
   switch(previousTab) {
     case 'primaryTab':
@@ -510,8 +508,6 @@ function refreshCurrentTab(){
       document.getElementById('primary-tab').click();    
       break;
   }
-
-  //document.getElementById('primary-tab').click();
 }
 
 function clickPrimaryTab(){
