@@ -197,7 +197,8 @@
   </script>
   <script src="gmailScript.js"></script>
   
-  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};
+  window.handleClientLoad(); window.testFun()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
 </body>
