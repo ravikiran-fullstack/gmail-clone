@@ -258,7 +258,6 @@ function formatDate(date){
 ];
 
 // document.write("The current month is " + monthNames[d.getMonth()]);
-console.log(date);
   const dateString = date.substring(0,25);
   const mailDate = new Date(dateString);
   // console.log(temp.getDate())
@@ -280,6 +279,7 @@ async function processIndividualEmailsData(userEmailsData, category){
       emailsInfoArray.push(emailInfo)
     })
   ).then(() => {
+    document.getElementById('emailsLoading').classList.add('hidden');
     generateEmailsHtml(emailsInfoArray, category);
   }).catch(err => console.error('err', err));
 }
@@ -323,38 +323,28 @@ function processEmailsInfoArray(emailsInfoArray, category){
     })
     emailsProcessedData.push(emailProcessedData);
   })
-  console.log('emailsProcessedData',emailsProcessedData);
   return sortEmailsByDate(emailsProcessedData);
 }
 
 function generateEmailsHtml(emailsInfoArray, category){
   const sortedEmailsInfoArray = processEmailsInfoArray(emailsInfoArray, category);
-  document.getElementById('emailsLoading').classList.add('hidden');
   let emailTab = 'primaryTab';
   if(category === 'INBOX'){
     document.getElementById('emailsTabList').classList.remove('hidden');
-    emailTab = 'primaryTab';
-    document.getElementById(emailTab).innerHTML = '';  
   } else if(category === 'CATEGORY_SOCIAL'){
     document.getElementById('emailsTabList').classList.remove('hidden');
     emailTab = 'socialTab';
-    document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'CATEGORY_PROMOTIONS'){
     document.getElementById('emailsTabList').classList.remove('hidden');
     emailTab = 'promotionsTab';
-    document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'SENT'){
     emailTab = 'sentMailsTab';
-    document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'STARRED'){
     emailTab = 'starredTab';
-    document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'IMPORTANT'){
     emailTab = 'importantTab';
-    document.getElementById(emailTab).innerHTML = '';
   } else if(category === 'STARRED'){
     emailTab = 'starredTab';
-    document.getElementById(emailTab).innerHTML = '';
   } 
   
   const emailsTable =  document.createElement('div');
@@ -362,8 +352,6 @@ function generateEmailsHtml(emailsInfoArray, category){
   emailsTable.setAttribute('id', `${emailTab}Table`);
   emailsProcessedData = [];
   sortedEmailsInfoArray.map(email => {
-    console.log('email', email);
-    console.log('-------------------------------------')
     const tableRow = document.createElement('div');
     tableRow.classList.add('row','emailsCustomRow');
     if(!email.isUnRead){
@@ -397,6 +385,7 @@ function fetchPrimaryMessages(){
 
 function showStarred(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   if(previousButton !== ''){
@@ -411,6 +400,7 @@ function showStarred(){
 
 function showImportantMails(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   if(previousButton !== ''){
@@ -425,6 +415,7 @@ function showImportantMails(){
 
 function showSentMails(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   if(previousButton !== ''){
@@ -439,6 +430,7 @@ function showSentMails(){
 
 function showDrafts(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   if(previousButton !== ''){
@@ -457,6 +449,7 @@ function fetchDrafts(){
 
 function showPrimaryEmails(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   if(previousButton !== ''){
@@ -471,6 +464,7 @@ function showPrimaryEmails(){
 
 function showSocialEmails(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   document.getElementById('socialTab').classList.remove('hidden');
@@ -480,16 +474,16 @@ function showSocialEmails(){
 
 function showPromotionsEmails(){
   if(previousTab !== ''){
+    document.getElementById(previousTab).innerHTML = '';
     document.getElementById(previousTab).classList.add('hidden');
   }
   document.getElementById('promotionsTab').classList.remove('hidden');
+  document.getElementById(previousTab).innerHTML = '';
   fetchAllMessages('CATEGORY_PROMOTIONS');
   previousTab = 'promotionsTab';
 }
 
 function refreshCurrentTab(){
-  console.log('previousTab',previousTab);
-
   switch(previousTab) {
     case 'primaryTab':
       document.getElementById('primary-tab').click();    
