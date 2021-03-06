@@ -1,6 +1,6 @@
 // Client ID and API key from the Developer Console
-var CLIENT_ID = "354191623029-inuaug8o7ca6f909t37miohr1hpcf9gu.apps.googleusercontent.com"; //  Need to update this
-var API_KEY = "AIzaSyD4cUbyfOPegLeDAU-TJym-7DwFQrrEOEw"; // Need to update this
+var CLIENT_ID = "670721118119-i4qsv5umebfaa956uufhet4ksb7r6ghl.apps.googleusercontent.com"; //  Need to update this
+var API_KEY = "AIzaSyBm0nwlvnDHxQncvYsSRHXdoOjHLJ9ol80"; // Need to update this
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
@@ -16,9 +16,6 @@ var signOutButton = document.getElementById("signOut_button");
  *  On load, called to load the auth2 library and API client library.
  */
 window.handleClientLoad = handleClientLoad;
-window.testFun = function (){
-  console.log('testing new method');
-}
 function handleClientLoad() {
   gapi.load("client:auth2", initClient);
 }
